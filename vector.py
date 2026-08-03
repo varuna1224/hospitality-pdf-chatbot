@@ -28,10 +28,13 @@ class VectorStore:
         self.index = faiss.IndexFlatL2(dim)
         self.metadata = []  # parallel list: chunk dicts (text, source, chunk_id)
 
-    def add_chunks(self, chunks: list):
+   def add_chunks(self, chunks: list):
         """
         Embeds and stores a list of chunk dicts (from chunking.py).
         """
+        if not chunks:
+            return  # nothing extractable - skip silently, caller shows a warning
+
         texts = [c["text"] for c in chunks]
         vectors = embed_texts(texts)
         self.index.add(vectors)
