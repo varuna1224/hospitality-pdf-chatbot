@@ -21,9 +21,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()   # "openai" | "anthropic" | "gemini"
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 
 SYSTEM_PROMPT = """You are a courteous hospitality assistant for a hotel/resort.
 Answer ONLY using the CONTEXT provided below, which comes from the
