@@ -9,3 +9,8 @@ streamlit>=1.38
    anthropic>=0.34
    google-generativeai>=0.8
    python-dotenv>=1.0
+sentence-transformers
+torch
+torchvision
+faiss-cpu
+numpy
