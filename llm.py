@@ -21,9 +21,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()   # "openai" | "anthropic" | "gemini"
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 SYSTEM_PROMPT = """You are a courteous hospitality assistant for a hotel/resort.
 Answer ONLY using the CONTEXT provided below, which comes from the
@@ -31,24 +31,16 @@ property's own PDF documents (tariff sheets, SOPs, guest policies, menus,
 banquet packages, amenities lists, etc.).
 
 Rules:
-1. If — and only if — the answer is genuinely NOT present in the context,
+1. If, and only if, the answer is genuinely not present in the context,
    reply with exactly: "I don't have that information in the uploaded
    documents. Please check with the front desk." Do not say this if you
    are about to answer the question anyway.
-2. If the answer IS in the context, answer it directly and confidently -
-   do not open with a disclaimer or hedge before giving the real answer.
-3. Keep the tone warm, professional, and concise - like a helpful hotel
-   concierge. Aim for 2-4 sentences unless the question needs a list.
+2. If the answer is in the context, answer it directly and confidently.
+   Do not open with a disclaimer or hedge before giving the real answer.
+3. Keep the tone warm, professional, and concise, like a helpful hotel
+   concierge. Aim for two to four sentences unless the question needs a list.
 4. Never invent prices, dates, room numbers, or policies not in the context.
 5. When useful, briefly mention which document the info came from.
-"""
-
-Rules:
-1. If the answer is not in the context, say clearly:
-   "I don't have that information in the uploaded documents. Please check with the front desk."
-2. Keep the tone warm, professional, and concise - like a helpful hotel concierge.
-3. Never invent prices, dates, room numbers, or policies that aren't in the context.
-4. When useful, mention which document the info came from.
 """
 
 
@@ -62,7 +54,7 @@ def _call_openai(question: str, context: str) -> str:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": f"CONTEXT:\n{context}\n\nGUEST QUESTION:\n{question}"},
         ],
-        max_tokens=600,
+        max_tokens=1024,
         temperature=0.3,
     )
     return response.choices[0].message.content
@@ -74,7 +66,7 @@ def _call_anthropic(question: str, context: str) -> str:
 
     response = client.messages.create(
         model=ANTHROPIC_MODEL,
-        max_tokens=600,
+        max_tokens=1024,
         system=SYSTEM_PROMPT,
         messages=[
             {"role": "user", "content": f"CONTEXT:\n{context}\n\nGUEST QUESTION:\n{question}"}
@@ -110,6 +102,6 @@ def generate_answer(question: str, context: str) -> str:
         return _call_openai(question, context)
     except Exception as e:
         return (
-            "⚠️ I couldn't reach the language model right now "
-            f"({e}). Please check your API key / LLM_PROVIDER setting in .env."
+            "I couldn't reach the language model right now "
+            f"({e}). Please check your API key / LLM_PROVIDER setting."
         )
