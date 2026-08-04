@@ -69,7 +69,10 @@ if uploaded_files:
                 st.session_state.vector_store.add_chunks(chunks)
                 st.session_state.vector_store.save()
                 st.session_state.indexed_files.update(new_docs.keys())
-                st.sidebar.success(f"✅ Indexed: {', '.join(new_docs.keys())}")
+                st.sidebar.success(
+                    f"✅ Indexed: {', '.join(new_docs.keys())}\n\n"
+                    f"📦 Total chunks created: **{len(chunks)}**"
+                )
             else:
                 st.sidebar.error(
                     "⚠️ No readable text found in this PDF. It may be a scanned/"
