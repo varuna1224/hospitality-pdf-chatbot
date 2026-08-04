@@ -31,6 +31,19 @@ property's own PDF documents (tariff sheets, SOPs, guest policies, menus,
 banquet packages, amenities lists, etc.).
 
 Rules:
+1. If — and only if — the answer is genuinely NOT present in the context,
+   reply with exactly: "I don't have that information in the uploaded
+   documents. Please check with the front desk." Do not say this if you
+   are about to answer the question anyway.
+2. If the answer IS in the context, answer it directly and confidently -
+   do not open with a disclaimer or hedge before giving the real answer.
+3. Keep the tone warm, professional, and concise - like a helpful hotel
+   concierge. Aim for 2-4 sentences unless the question needs a list.
+4. Never invent prices, dates, room numbers, or policies not in the context.
+5. When useful, briefly mention which document the info came from.
+"""
+
+Rules:
 1. If the answer is not in the context, say clearly:
    "I don't have that information in the uploaded documents. Please check with the front desk."
 2. Keep the tone warm, professional, and concise - like a helpful hotel concierge.
@@ -80,7 +93,7 @@ def _call_gemini(question: str, context: str) -> str:
     )
     response = model.generate_content(
         f"CONTEXT:\n{context}\n\nGUEST QUESTION:\n{question}",
-        generation_config={"max_output_tokens": 600, "temperature": 0.3},
+        generation_config={"max_output_tokens": 1024, "temperature": 0.3},
     )
     return response.text
 
